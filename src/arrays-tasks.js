@@ -37,8 +37,14 @@ function getIntervalArray(start, end) {
  *    sumArrays([10, 20, 30], [5, 10, 15]) => [15, 30, 45]
  *    sumArrays([-1, 0, 1], [1, 2, 3, 4]) => [0, 2, 4, 4]
  */
-function sumArrays(/* arr1, arr2 */) {
-  throw new Error('Not implemented');
+function sumArrays(arr1, arr2) {
+  function sum(a1, a2) {
+    return a1.map((item, i) => {
+      if (a2[i]) return item + a2[i];
+      return item;
+    });
+  }
+  return arr1.length >= arr2.length ? sum(arr1, arr2) : sum(arr2, arr1);
 }
 
 /**
@@ -266,8 +272,12 @@ function distinct(arr) {
  *    createNDimensionalArray(4, 2) => [[[[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
  *    createNDimensionalArray(1, 1) => [0]
  */
-function createNDimensionalArray(/* n, size */) {
-  throw new Error('Not implemented');
+function createNDimensionalArray(n, size) {
+  if (n === 1) return Array(size).fill(0);
+
+  return Array.from({ length: size }, () =>
+    createNDimensionalArray(n - 1, size)
+  );
 }
 
 /**
@@ -384,8 +394,8 @@ function generateOdds(len) {
  *   getElementByIndices(['one','two','three'], [2]) => 'three'  (arr[2])
  *   getElementByIndices([[[ 1, 2, 3]]], [ 0, 0, 1 ]) => 2        (arr[0][0][1])
  */
-function getElementByIndices(/* arr, indices */) {
-  throw new Error('Not implemented');
+function getElementByIndices(arr, indices) {
+  return indices.reduce((acc, cur) => acc[cur], arr);
 }
 
 /**
@@ -423,8 +433,13 @@ function getFalsyValuesCount(arr) {
  *                              [0,0,0,1,0],
  *                              [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  return Array.from({ length: n }, (x, i) => {
+    return Array.from({ length: n }, (y, j) => {
+      if (j === i) return 1;
+      return 0;
+    });
+  });
 }
 
 /**
@@ -633,8 +648,17 @@ function sortDigitNamesByNumericOrder(arr) {
  *   swapHeadAndTail([]) => []
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  if (arr.length % 2 === 0) {
+    const leftPart = arr.splice(0, arr.length / 2);
+    return [...arr, ...leftPart];
+  }
+
+  const middleIndx = Math.floor(arr.length / 2);
+  const rightPart = arr.splice(middleIndx + 1);
+  const leftPart = arr.splice(0, middleIndx);
+
+  return [...rightPart, ...arr, ...leftPart];
 }
 
 module.exports = {
